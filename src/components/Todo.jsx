@@ -52,7 +52,23 @@ const Todo = () => {
     });
   };
 
-  console.log(todos);
+  const handleSave = (e) => {
+    e.preventDefault();
+    const updatedTodo = todos?.list?.map((item) =>
+      item.id === todos.editId
+        ? {
+            ...item,
+            todo: todos.editText,
+          }
+        : item,
+    );
+    setTodos({
+      list: updatedTodo,
+      editId: null,
+      editText: "",
+      inout: "",
+    });
+  };
   return (
     <div className="min-h-screen  flex items-center justify-center p-4">
       <div className="  w-full max-w-md bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-6 border border-white/20 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-500 ">
@@ -87,11 +103,20 @@ const Todo = () => {
             todos.list.map((item) => (
               <>
                 {item.id === todos.editId ? (
-                  <form className=" flex items-center justify-between gap-3 w-[99%]">
+                  <form
+                    className=" flex items-center justify-between gap-3 w-[99%]"
+                    onSubmit={handleSave}
+                  >
                     <input
                       className="w-[90%] px-3 py-2 rounded-xl bg-white/20 text-white placeholder-gray-200 outline-none focus:ring-2 focus:ring-white/50"
                       type="text"
                       value={todos.editText}
+                      onChange={(e) => {
+                        setTodos({
+                          ...todos,
+                          editText: e.target.value,
+                        });
+                      }}
                     />
 
                     <button
